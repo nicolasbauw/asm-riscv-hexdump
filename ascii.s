@@ -34,8 +34,9 @@ print_line:
 
     li      s1,16                       # Initialize counter
     li      s2,0x20                     # ascii space
-    mv      s3,a0                       # Saves input buffer address to a3
-    la      s4,line_buffer              # a4 = ascii output buffer address
+    mv      s3,a0                       # Saves input buffer address to s3
+    la      s4,line_buffer              # s4 = ascii output buffer address
+    li      s5,0x0a                     # Line feed
 loop:
     lb      a0,(s3)                     # Loads data byte from buffer
     jal     byte_convert                # Converts this byte to ascii values
@@ -46,6 +47,13 @@ loop:
     addi    s4,s4,3
     addi    s1,s1,-1                    # Decrementing counter
     bne     s1,x0,loop                  # 16 bytes processed ?
+    sb      s5,(s4)                     # Inserting line feed at the end of the line buffer
+
+    li      a0, 1                       # stdout
+    la      a1, line_buffer             # Printing line_buffer
+    la      a2, 49                      # buffer lenght
+    li      a7, 64                      # "write" syscall
+    ecall
 
     ld      ra,(sp)                     # Retrieve return address from stack
     addi    sp,sp,8
