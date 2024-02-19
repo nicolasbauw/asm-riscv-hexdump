@@ -18,21 +18,7 @@ _start:
     li      a7,56               # "openat" system call
     ecall
     blt     a0,x0,exit          # Error ? we exit
-
-    mv      s7,a0               # we save the file descriptor in s7
-    li      a1,0                # offset
-    li      a2,2                # SEEK_END
-    li      a7,62               # "lseek" system call
-    ecall
-    blt     a0,x0,close_exit    # Error ? we close the FD and exit
-    mv      t6,a0               # we save the file size in t6
-
-    mv      a0,s7               # first argument : the file descriptor (saved in s7)
-    li      a1,0                # offset
-    li      a2,0                # SEEK_SET
-    li      a7,62               # "lseek" system call
-    ecall
-    blt     a0,x0,close_exit    # Error ? we close the FD and exit
+    mv      s7,a0               # Saving FD in s7
 
 hexdump:
     mv      a0,s7               # Opened FD
