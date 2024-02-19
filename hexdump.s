@@ -50,5 +50,5 @@ exit:
     ecall
 
 
-.lcomm line_buffer,48
+.lcomm line_buffer,49
 .lcomm buffer,64
