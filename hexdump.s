@@ -1,5 +1,7 @@
 .global _start
 .global line_buffer
+.global ascii_offset
+.global offset
 
 .equ BUF_SIZE,4096
 
@@ -19,6 +21,7 @@ _start:
     ecall
     blt     a0,x0,exit          # Error ? we exit
     mv      s7,a0               # Saving FD in s7
+    mv      s6,x0               # offset counter
 
 hexdump:
     mv      a0,s7               # Opened FD
@@ -30,6 +33,11 @@ hexdump:
 
     la      t5,buffer           # t5 = Pointer to the bytes buffer
 print_all_lines:
+    jal     print_offset
+    addi    s6,s6,16
+    la      s8,offset
+    sw      s6,(s8)
+
     mv      a0,t5               # a0 = argument for print_lines function
     jal     print_line          # Prints a 16 bytes line
     addi    t4,t4,-16           # Decrementing number of bytes to process
@@ -48,6 +56,7 @@ exit:
     li  a7,93                   # "exit" system call
     ecall
 
-
+.lcomm  offset,4                # offset = 32 bits = 4 bytes
+.lcomm ascii_offset, 9          # 4 bytes * chars per byte + 1 trailing space
 .lcomm line_buffer,49
 .lcomm buffer,BUF_SIZE

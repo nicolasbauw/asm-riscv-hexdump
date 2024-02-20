@@ -1,4 +1,5 @@
 .global print_line
+.global print_offset
 .text
 
 # Hex byte conversion to ascii
@@ -57,4 +58,47 @@ loop:
 
     ld      ra,(sp)                     # Retrieve return address from stack
     addi    sp,sp,8
+    ret
+
+# Prints on stdout the offset of the displayed data
+# input : the offset stored at (offset)
+print_offset:
+    addi    sp,sp,-8                    # Saving return address on stack
+    sd      ra,(sp)
+
+    la      a3,ascii_offset
+    la      a4,offset
+
+    lb      a0,3(a4)
+    jal     byte_convert
+    sb      a0,(a3)
+    sb      a1,1(a3)
+
+    lb      a0,2(a4)
+    jal     byte_convert
+    sb      a0,2(a3)
+    sb      a1,3(a3)
+
+    lb      a0,1(a4)
+    jal     byte_convert
+    sb      a0,4(a3)
+    sb      a1,5(a3)
+
+    lb      a0,(a4)
+    jal     byte_convert
+    sb      a0,6(a3)
+    sb      a1,7(a3)
+
+    li      a0,0x20
+    sb      a0,8(a3)
+
+    li      a0, 1                       # stdout
+    la      a1, ascii_offset            # Printing line_buffer
+    la      a2, 9                       # buffer lenght
+    li      a7, 64                      # "write" syscall
+    ecall
+
+    ld      ra,(sp)                     # Retrieve return address from stack
+    addi    sp,sp,8
+
     ret
