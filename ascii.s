@@ -1,5 +1,8 @@
 .global print_line
 .global print_offset
+
+.equ LINE_BUF_SIZE,68
+
 .text
 
 # Hex byte conversion to ascii
@@ -78,7 +81,7 @@ is_ascii2:
 
     li      a0, 1                       # stdout
     la      a1, line_buffer             # Printing line_buffer
-    la      a2, 68                      # buffer lenght
+    la      a2, LINE_BUF_SIZE           # buffer lenght
     li      a7, 64                      # "write" syscall
     ecall
 

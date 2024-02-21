@@ -4,6 +4,7 @@
 .global offset
 
 .equ BUF_SIZE,4096
+.equ LINE_BUF_SIZE,68
 
 .text
 
@@ -58,5 +59,5 @@ exit:
 
 .lcomm offset,4                 # offset = 32 bits = 4 bytes
 .lcomm ascii_offset, 9          # 4 bytes * chars per byte + 1 trailing space
-.lcomm line_buffer,68
+.lcomm line_buffer,LINE_BUF_SIZE
 .lcomm buffer,BUF_SIZE
