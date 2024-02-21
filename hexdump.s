@@ -21,7 +21,7 @@ _start:
     ecall
     blt     a0,x0,exit          # Error ? we exit
     mv      s7,a0               # Saving FD in s7
-    mv      s6,x0               # offset counter
+    mv      s6,x0               # s6 = offset counter
 
 hexdump:
     mv      a0,s7               # Opened FD
@@ -56,7 +56,7 @@ exit:
     li  a7,93                   # "exit" system call
     ecall
 
-.lcomm  offset,4                # offset = 32 bits = 4 bytes
+.lcomm offset,4                 # offset = 32 bits = 4 bytes
 .lcomm ascii_offset, 9          # 4 bytes * chars per byte + 1 trailing space
-.lcomm line_buffer,49
+.lcomm line_buffer,68
 .lcomm buffer,BUF_SIZE
